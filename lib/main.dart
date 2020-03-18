@@ -1,14 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:just_do/src/todo.dart';
 import 'package:just_do/src/todo_page.dart';
 
-void main() {
-  Hive.init('just_do_db');
-  Hive.registerAdapter(TodoListAdapter());
-  Hive.registerAdapter(TodoAdapter());
-  debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+void main() async {
+  if (Platform.isMacOS) {
+    debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+  }
   runApp(MyApp());
 }
 
