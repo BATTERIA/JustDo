@@ -34,6 +34,7 @@ class _TodoPageState extends State<TodoPage> {
     return Stack(
       children: [
         TodoListView(
+          editTodo: editTodo,
           deleteFunction: (index) {
             setState(() {
               todos.removeAt(index);
@@ -54,14 +55,6 @@ class _TodoPageState extends State<TodoPage> {
                       mm,
                       "-",
                       dd,
-                      " ",
-                      DD,
-                      " ",
-                      HH,
-                      ":",
-                      nn,
-                      ":",
-                      ss,
                     ])));
               });
               _listStorage.save(todos);
@@ -71,6 +64,27 @@ class _TodoPageState extends State<TodoPage> {
         ),
       ],
     );
+  }
+
+  void editTodo(int index) {
+    EditDialog(
+      onConfirm: (content) {
+        setState(() {
+          todos[index] = Todo(
+              content,
+              formatDate(DateTime.now(), [
+                yyyy,
+                "-",
+                mm,
+                "-",
+                dd,
+              ]));
+        });
+        _listStorage.save(todos);
+        Navigator.pop(context);
+      },
+      defaultText: todos[index].content,
+    ).show(context);
   }
 
   @override

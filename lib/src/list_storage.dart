@@ -12,8 +12,9 @@ class ListStorage {
     var path = StringBuffer();
     if (Platform.isIOS || Platform.isAndroid) {
       path.write((await getTemporaryDirectory()).path);
+      path.write('/');
     }
-    path.write('/just_do_db');
+    path.write('just_do_db');
     Hive.init(path.toString());
     Hive.registerAdapter(TodoListAdapter());
     Hive.registerAdapter(TodoAdapter());

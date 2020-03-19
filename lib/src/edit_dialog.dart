@@ -5,25 +5,47 @@ import 'package:just_do/src/room_dialog.dart';
 typedef ConfirmedCallback = Function(String content);
 
 class EditDialog {
-  EditDialog({this.onConfirm});
+  EditDialog({this.onConfirm, this.defaultText = ''});
 
   final ConfirmedCallback onConfirm;
+
+  final String defaultText;
 
   TextEditingController _controller = TextEditingController();
 
   void show(BuildContext context) {
     RoomDialog(
-      content: (context) => _EditView(controller: _controller,),
-      rightButtonBuilder: (_) =>
-          DialogButtonData(text: '确认', onClick: () => onConfirm(_controller.text)),
+      content: (context) => _EditView(
+        controller: _controller,
+        onConfirm: onConfirm,
+        defaultText: defaultText,
+      ),
+      rightButtonBuilder: (_) => DialogButtonData(
+          text: '确认', onClick: () => onConfirm(_controller.text)),
     ).show(context);
   }
 }
 
-class _EditView extends StatelessWidget {
-  const _EditView({Key key, this.controller}) : super(key: key);
+class _EditView extends StatefulWidget {
+  const _EditView({Key key, this.controller, this.onConfirm, this.defaultText})
+      : super(key: key);
 
   final TextEditingController controller;
+
+  final ConfirmedCallback onConfirm;
+
+  final String defaultText;
+
+  @override
+  __EditViewState createState() => __EditViewState();
+}
+
+class __EditViewState extends State<_EditView> {
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.text = widget.defaultText;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +53,9 @@ class _EditView extends StatelessWidget {
       child: Column(
         children: [
           TextField(
-            controller: controller,
+            autofocus: true,
+            controller: widget.controller,
+            onSubmitted: (content) => widget.onConfirm(content),
           ),
         ],
       ),
