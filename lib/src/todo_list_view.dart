@@ -26,6 +26,7 @@ class _TodoListViewState extends State<TodoListView> {
   @override
   Widget build(BuildContext context) {
     return ReorderableListView(
+      padding: EdgeInsets.only(top: 50),
       onReorder: (int oldIndex, int newIndex) {
         print(oldIndex);
         print(newIndex);

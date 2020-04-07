@@ -67,9 +67,12 @@ class CardView extends StatelessWidget {
               ],
             ),
             SizedBox(width: 20),
-            Text(
-              value,
-              style: TextStyle(color: JColors.textColor),
+            GestureDetector(
+              onTap: () => editTodo(index),
+              child: Text(
+                value,
+                style: TextStyle(color: JColors.textColor),
+              ),
             ),
           ],
         ),
