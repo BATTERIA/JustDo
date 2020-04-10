@@ -1,0 +1,21 @@
+@startuml
+class PluginRegistry {
+    -consumers: HashMap<String, Plugin>
+    -producers: HashMap<String, Plugin>
+    +getConsumer(key: String)
+    +getProducer(key: String)
+    +registerConsumer(key: String, plugin: Plugin)
+    +registerProducer(key: String, plugin: Plugin)
+    +unregisterConsumer(key: String)
+    +unregisterProducer(key: String)
+    +updateConsumer(key: String, plugin: Plugin)
+    +updateProducer(key: String, plugin: Plugin)
+}
+
+interface Plugin {
+    -onRegister()
+    -onUnRegister()
+}
+
+Plugin <-down-o PluginRegistry
+@enduml
