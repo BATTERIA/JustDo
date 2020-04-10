@@ -35,6 +35,7 @@ class _TodoPageState extends State<TodoPage> {
       children: [
         TodoListView(
           editTodo: editTodo,
+          addTodo: addTodo,
           deleteFunction: (index) {
             setState(() {
               todos.removeAt(index);
@@ -44,26 +45,28 @@ class _TodoPageState extends State<TodoPage> {
           todos: todos,
         ),
         FloatButton(
-          onTap: () {
-            EditDialog(onConfirm: (content) {
-              setState(() {
-                todos.add(Todo(
-                    content,
-                    formatDate(DateTime.now(), [
-                      yyyy,
-                      "-",
-                      mm,
-                      "-",
-                      dd,
-                    ])));
-              });
-              _listStorage.save(todos);
-              Navigator.pop(context);
-            }).show(context);
-          },
+          onTap: addTodo,
         ),
       ],
     );
+  }
+
+  void addTodo() {
+    EditDialog(onConfirm: (content) {
+      setState(() {
+        todos.add(Todo(
+            content,
+            formatDate(DateTime.now(), [
+              yyyy,
+              "-",
+              mm,
+              "-",
+              dd,
+            ])));
+      });
+      _listStorage.save(todos);
+      Navigator.pop(context);
+    }).show(context);
   }
 
   void editTodo(int index) {

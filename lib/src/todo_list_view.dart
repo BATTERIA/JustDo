@@ -2,15 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_do/src/card_view.dart';
 
+import 'add_card.dart';
 import 'todo.dart';
 
 typedef DeleteFunction = Function(int index);
 
 class TodoListView extends StatefulWidget {
-  const TodoListView({Key key, this.todos, this.deleteFunction, this.editTodo})
+  const TodoListView(
+      {Key key, this.todos, this.addTodo, this.deleteFunction, this.editTodo})
       : super(key: key);
 
   final DeleteFunction deleteFunction;
+
+  final Function addTodo;
 
   final List<Todo> todos;
 
@@ -25,8 +29,14 @@ class _TodoListViewState extends State<TodoListView> {
 
   @override
   Widget build(BuildContext context) {
+    final todos = <Todo>[];
+
+    todos.addAll(widget.todos);
+
+    todos.add(Todo('', ''));
+
     return ReorderableListView(
-      padding: EdgeInsets.only(top: 50),
+      padding: EdgeInsets.only(top: 25),
       onReorder: (int oldIndex, int newIndex) {
         print(oldIndex);
         print(newIndex);
@@ -37,8 +47,17 @@ class _TodoListViewState extends State<TodoListView> {
           widget.todos.insert(newIndex, element);
         });
       },
-      children: widget.todos.map((todo) {
-        final index = widget.todos.indexOf(todo);
+      children: todos.map((todo) {
+        final index = todos.indexOf(todo);
+        if (index + 1 == todos.length) {
+          return GestureDetector(
+            key: ValueKey(todo),
+            child: AddCard(
+              content: '新增TODO项',
+            ),
+            onTap: widget.addTodo,
+          );
+        }
         return CardView(
           key: ValueKey(todo),
           index: index,

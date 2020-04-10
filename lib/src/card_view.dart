@@ -2,11 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_do/src/jcolors.dart';
 
+import 'small_card_view.dart';
+
 typedef EditCallback = Function(int index);
 
 class CardView extends StatelessWidget {
   const CardView(
-      {Key key, this.index, this.content, this.dateTime, this.deleteItem, this.editTodo})
+      {Key key,
+      this.index,
+      this.content,
+      this.dateTime,
+      this.deleteItem,
+      this.editTodo})
       : super(key: key);
 
   final int index;
@@ -19,18 +26,18 @@ class CardView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dismissible(
       key: Key('key$index'),
-      child: buildCardView(content, dateTime),
+      child: buildCardView(content, dateTime, context),
       onDismissed: (_) => deleteItem(),
     );
   }
 
-  Widget buildCardView(String key, String value) {
+  Widget buildCardView(String key, String value, BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-      height: 60,
-      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+      height: 36,
+      width: MediaQuery.of(context).size.width,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 30),
+        padding: EdgeInsets.symmetric(horizontal: 5),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: JColors.itemColor,
@@ -43,37 +50,90 @@ class CardView extends StatelessWidget {
             )
           ],
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                GestureDetector(
-                  onTap: deleteItem,
-                  child: Container(
-                    width: 30,
-                    height: 30,
-                    child: Icon(Icons.delete_outline),
-                  ),
-                ),
-                SizedBox(width: 20),
-                GestureDetector(
-                  onTap: () => editTodo(index),
-                  child: Text(
-                    key,
-                    style: TextStyle(color: JColors.textColor),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: deleteItem,
+                      child: Container(
+                        width: 30,
+                        height: 30,
+                        child: Icon(
+                          Icons.delete_outline,
+                          size: 17,
+                          color: JColors.deleteIcon,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                    Container(
+                      width: MediaQuery.of(context).size.width - 90,
+                      child: GestureDetector(
+                        onTap: () => editTodo(index),
+                        child: Text(
+                          key,
+                          style: TextStyle(color: JColors.textColor),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                    Container(
+                      width: 30,
+                      height: 30,
+                      child: GestureDetector(
+                        onTap: deleteItem,
+                        child: PopupMenuButton(
+                          elevation: 2,
+                          padding: EdgeInsets.all(0),
+                          tooltip: '拆分todo项',
+                          icon: Icon(
+                            Icons.details,
+                            size: 17,
+                            color: JColors.deleteIcon,
+                          ),
+                          itemBuilder: (BuildContext context) {
+                            return [
+                              const PopupMenuItem(
+                                child: ChildView(
+                                  content: '123',
+                                  dateTime: '13',
+                                ),
+                              ),
+                            ];
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-            SizedBox(width: 20),
-            GestureDetector(
-              onTap: () => editTodo(index),
-              child: Text(
-                value,
-                style: TextStyle(color: JColors.textColor),
-              ),
-            ),
+//            Row(
+//              mainAxisAlignment: MainAxisAlignment.start,
+//              children: [
+//                Container(
+//                  child: GestureDetector(
+//                    onTap: () => editTodo(index),
+//                    child: Text(
+//                      value,
+//                      style: TextStyle(
+//                        color: JColors.textColor,
+//                      ),
+//                      maxLines: 1,
+//                      overflow: TextOverflow.ellipsis,
+//                    ),
+//                  ),
+//                ),
+//              ],
+//            ),
           ],
         ),
       ),
