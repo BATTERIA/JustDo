@@ -13,8 +13,8 @@ class EditDialog {
 
   TextEditingController _controller = TextEditingController();
 
-  void show(BuildContext context) {
-    RoomDialog(
+  Future show(BuildContext context) async {
+    await RoomDialog(
       content: (context) => _EditView(
         controller: _controller,
         onConfirm: onConfirm,

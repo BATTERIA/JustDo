@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:just_do/src/jcolors.dart';
 
 class AddCard extends StatelessWidget {
-  const AddCard(
-      {Key key,
-        this.index,
-        this.content,
-        this.dateTime,
-        this.deleteItem})
-      : super(key: key);
+  const AddCard({
+    Key key,
+    this.index,
+    this.content,
+    this.dateTime,
+    this.deleteItem,
+  }) : super(key: key);
 
   final int index;
   final String content;

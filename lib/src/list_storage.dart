@@ -18,13 +18,14 @@ class ListStorage {
     Hive.init(path.toString());
     Hive.registerAdapter(TodoListAdapter());
     Hive.registerAdapter(TodoAdapter());
+    Hive.registerAdapter(TaskAdapter());
 
     final _box = await Hive.openBox(_boxName);
     final list = _box.get(_listKeyName);
     if (list != null && list is TodoList) {
       return list.todos;
     }
-    return<Todo>[];
+    return <Todo>[];
   }
 
   void save(List<Todo> todos) async {

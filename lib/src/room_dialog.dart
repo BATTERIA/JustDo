@@ -142,8 +142,8 @@ class RoomDialog extends StatelessWidget {
     );
   }
 
-  void show(BuildContext context, {bool barrierDismissible = true}) {
-    showDialog(
+  Future show(BuildContext context, {bool barrierDismissible = true}) async {
+    await showDialog(
         barrierDismissible: barrierDismissible,
         context: context,
         builder: (context) => this);

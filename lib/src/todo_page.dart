@@ -43,10 +43,13 @@ class _TodoPageState extends State<TodoPage> {
             _listStorage.save(todos);
           },
           todos: todos,
+          editTask: editTask,
+          addTask: addTask,
+          deleteTask: deleteTask,
         ),
-        FloatButton(
-          onTap: addTodo,
-        ),
+//        FloatButton(
+//          onTap: addTodo,
+//        ),
       ],
     );
   }
@@ -54,7 +57,8 @@ class _TodoPageState extends State<TodoPage> {
   void addTodo() {
     EditDialog(onConfirm: (content) {
       setState(() {
-        todos.add(Todo(
+        todos.add(
+          Todo(
             content,
             formatDate(DateTime.now(), [
               yyyy,
@@ -62,7 +66,10 @@ class _TodoPageState extends State<TodoPage> {
               mm,
               "-",
               dd,
-            ])));
+            ]),
+            <Task>[],
+          ),
+        );
       });
       _listStorage.save(todos);
       Navigator.pop(context);
@@ -73,21 +80,78 @@ class _TodoPageState extends State<TodoPage> {
     EditDialog(
       onConfirm: (content) {
         setState(() {
+          final todo = todos[index];
           todos[index] = Todo(
-              content,
-              formatDate(DateTime.now(), [
-                yyyy,
-                "-",
-                mm,
-                "-",
-                dd,
-              ]));
+            content,
+            formatDate(DateTime.now(), [
+              yyyy,
+              "-",
+              mm,
+              "-",
+              dd,
+            ]),
+            todo.tasks,
+          );
         });
         _listStorage.save(todos);
         Navigator.pop(context);
       },
       defaultText: todos[index].content,
     ).show(context);
+  }
+
+  Future<Task> addTask(int index) async {
+    Task task;
+    await EditDialog(onConfirm: (content) {
+      setState(() {
+        task = Task(
+          content,
+          formatDate(DateTime.now(), [
+            yyyy,
+            "-",
+            mm,
+            "-",
+            dd,
+          ]),
+        );
+        todos[index].tasks.add(task);
+      });
+      _listStorage.save(todos);
+      Navigator.pop(context);
+    }).show(context);
+    return task;
+  }
+
+  Future<Task> editTask(int index, int taskIndex) async {
+    Task task;
+    await EditDialog(
+      onConfirm: (content) {
+        setState(() {
+          task = Task(
+            content,
+            formatDate(DateTime.now(), [
+              yyyy,
+              "-",
+              mm,
+              "-",
+              dd,
+            ]),
+          );
+          todos[index].tasks[taskIndex] = task;
+        });
+        _listStorage.save(todos);
+        Navigator.pop(context);
+      },
+      defaultText: todos[index].tasks[taskIndex].content,
+    ).show(context);
+    return task;
+  }
+
+  void deleteTask(int index, int taskIndex) {
+    setState(() {
+      todos[index].tasks.removeAt(taskIndex);
+    });
+    _listStorage.save(todos);
   }
 
   @override

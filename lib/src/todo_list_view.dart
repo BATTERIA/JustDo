@@ -8,9 +8,16 @@ import 'todo.dart';
 typedef DeleteFunction = Function(int index);
 
 class TodoListView extends StatefulWidget {
-  const TodoListView(
-      {Key key, this.todos, this.addTodo, this.deleteFunction, this.editTodo})
-      : super(key: key);
+  const TodoListView({
+    Key key,
+    this.todos,
+    this.addTodo,
+    this.deleteFunction,
+    this.editTodo,
+    this.addTask,
+    this.deleteTask,
+    this.editTask,
+  }) : super(key: key);
 
   final DeleteFunction deleteFunction;
 
@@ -19,6 +26,9 @@ class TodoListView extends StatefulWidget {
   final List<Todo> todos;
 
   final EditCallback editTodo;
+  final Function addTask;
+  final Function deleteTask;
+  final Function editTask;
 
   @override
   _TodoListViewState createState() => _TodoListViewState();
@@ -33,7 +43,7 @@ class _TodoListViewState extends State<TodoListView> {
 
     todos.addAll(widget.todos);
 
-    todos.add(Todo('', ''));
+    todos.add(Todo('', '', []));
 
     return ReorderableListView(
       padding: EdgeInsets.only(top: 25),
@@ -53,7 +63,7 @@ class _TodoListViewState extends State<TodoListView> {
           return GestureDetector(
             key: ValueKey(todo),
             child: AddCard(
-              content: '新增TODO项',
+              content: '添加新的Todo项',
             ),
             onTap: widget.addTodo,
           );
@@ -68,6 +78,10 @@ class _TodoListViewState extends State<TodoListView> {
           },
           content: todo.content,
           dateTime: todo.date,
+          tasks: todo.tasks,
+          editTask: widget.editTask,
+          addTask: widget.addTask,
+          deleteTask: widget.deleteTask,
         );
       }).toList(),
     );

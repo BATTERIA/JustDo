@@ -1,0 +1,113 @@
+@startuml
+interface IMessage {
+
+	ITrackMessage toTrackMessage() // 转埋点源数据
+}
+
+interface ITrackMessage extends IMessage {
+	// 转map
+	Map toMap();
+}
+
+interface IUsageMessage extends IMessage {
+	float usage
+}
+
+interface ICPUMessage extends IUsageMessage
+interface IMemoryMessage extends IUsageMessage
+interface IBatteryMessage extends IUsageMessage
+
+interface IJankMessage extends IMessage {
+	ITrackMessage toTrackMessage();
+}
+
+interface IFPSMessage extends IMessage {
+	int value;
+}
+
+interface ILoopTimeMessage extends IMessage {
+	float timeInterval;
+}
+
+class UsageMessage implements IUsageMessage
+
+class CPUMessage extends UsageMessage
+
+CPUMessage .up.|> ICPUMessage
+
+class MemoryMessage extends UsageMessage
+MemoryMessage .up.|> IMemoryMessage
+class BatteryMessage extends UsageMessage
+BatteryMessage .up.|> IBatteryMessage
+
+class FPSMessage implements IFPSMessage
+
+class TrackMessage implements ITrackMessage {
+	Map toMap();
+}
+
+class JankMessage implements IJankMessage {
+	String timestamp
+}
+
+interface IContainer {
+	start()
+	stop()
+	IPlugin pluginById(String id);
+	registerPlugin(IPlugin plugin)
+	unregisterPlugin(IPlugin plugin)
+	void sendMessage(IMessage message);
+}
+
+class ContainerImpl implements IContainer {
+	HashMap<String, Plugin> plugins;
+
+	void sendMessage(IMessage message)
+}
+
+
+interface IPlugin {
+	String id
+	Container container;
+	start()
+	stop()
+	resiter(Container container)
+	onRegister
+	onUnregister
+}
+
+ContainerImpl o--> IPlugin
+
+interface ProducerPlugin extends IPlugin{
+	Container container;
+}
+
+interface ConsumerPlugin extends IPlugin {
+	Container container;
+	bool allowedReceivingMessage(IMessage message)
+
+	void onReceiveMessage(IMessage message)
+}
+
+class CPUPlugin implements ProducerPlugin {
+	float usage;
+
+	void tick()
+}
+
+
+class RunloopPlugin implements ProducerPlugin {
+	void loopTick(float timeInterval)
+}
+
+class TrackPlugin implements ConsumerPlugin {
+	bool allowedReceivingMessage(IMessage message)
+
+	void onReceiveMessage(IMessage message)
+
+	NueronsEvent transformMessage(IMessage message)
+}
+IContainer ..> IMessage
+ConsumerPlugin .up.> IMessage
+
+@enduml

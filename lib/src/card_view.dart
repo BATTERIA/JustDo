@@ -3,24 +3,33 @@ import 'package:flutter/material.dart';
 import 'package:just_do/src/jcolors.dart';
 
 import 'small_card_view.dart';
+import 'todo.dart';
 
 typedef EditCallback = Function(int index);
 
 class CardView extends StatelessWidget {
-  const CardView(
-      {Key key,
-      this.index,
-      this.content,
-      this.dateTime,
-      this.deleteItem,
-      this.editTodo})
-      : super(key: key);
+  const CardView({
+    Key key,
+    this.index,
+    this.content,
+    this.dateTime,
+    this.deleteItem,
+    this.editTodo,
+    this.tasks = const <Task>[],
+    this.editTask,
+    this.addTask,
+    this.deleteTask,
+  }) : super(key: key);
 
   final int index;
   final String content;
   final String dateTime;
   final Function deleteItem;
   final EditCallback editTodo;
+  final List<Task> tasks;
+  final Function editTask;
+  final Function addTask;
+  final Function deleteTask;
 
   @override
   Widget build(BuildContext context) {
@@ -100,13 +109,24 @@ class CardView extends StatelessWidget {
                             color: JColors.deleteIcon,
                           ),
                           itemBuilder: (BuildContext context) {
+//                            final height = 40 * (tasks.length + 1);
                             return [
-                              const PopupMenuItem(
-                                child: ChildView(
-                                  content: '123',
-                                  dateTime: '13',
+                              PopupMenuItem(
+                                enabled: false,
+                                child: Container(
+//                                  height: height.toDouble(),
+                                  width: 200,
+                                  child: TaskList(
+                                    index: index,
+                                    content: content,
+                                    dateTime: dateTime,
+                                    tasks: tasks,
+                                    editTask: editTask,
+                                    addTask: addTask,
+                                    deleteTask: deleteTask,
+                                  ),
                                 ),
-                              ),
+                              )
                             ];
                           },
                         ),
@@ -116,27 +136,90 @@ class CardView extends StatelessWidget {
                 ),
               ],
             ),
-//            Row(
-//              mainAxisAlignment: MainAxisAlignment.start,
-//              children: [
-//                Container(
-//                  child: GestureDetector(
-//                    onTap: () => editTodo(index),
-//                    child: Text(
-//                      value,
-//                      style: TextStyle(
-//                        color: JColors.textColor,
-//                      ),
-//                      maxLines: 1,
-//                      overflow: TextOverflow.ellipsis,
-//                    ),
-//                  ),
-//                ),
-//              ],
-//            ),
           ],
         ),
       ),
     );
+  }
+}
+
+class TaskList extends StatefulWidget {
+  const TaskList(
+      {Key key,
+      this.index,
+      this.content,
+      this.dateTime,
+      this.tasks,
+      this.editTask,
+      this.addTask,
+      this.deleteTask})
+      : super(key: key);
+  final int index;
+  final String content;
+  final String dateTime;
+  final List<Task> tasks;
+  final Function editTask;
+  final Function addTask;
+  final Function deleteTask;
+
+  @override
+  _TaskListState createState() => _TaskListState();
+}
+
+class _TaskListState extends State<TaskList> {
+  List<Task> tasks;
+
+  @override
+  void initState() {
+    super.initState();
+    tasks = widget.tasks;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final lists = <Widget>[];
+    tasks.forEach((element) {
+      lists.add(Container(
+        child: ChildView(
+          todoIndex: widget.index,
+          index: tasks.indexOf(element),
+          content: element.content,
+          dateTime: element.date,
+          deleteItem: (int i, int j) {
+//            tasks.removeAt(j);
+            widget.deleteTask(i, j);
+            setState(() {});
+          },
+          editTodo: editTask,
+        ),
+      ));
+    });
+    lists.add(Container(
+      child: AddChildView(
+        index: widget.index,
+        content: '添加新的Task项',
+        dateTime: '',
+        addTask: (int i) async {
+          final task = await widget.addTask(i);
+//          tasks.add(task);
+          setState(() {});
+        },
+      ),
+    ));
+    return Container(
+      height: ((tasks.length + 1) * 40).toDouble(),
+      child: ListView(
+        children: lists,
+      ),
+    );
+  }
+
+  Future<Task> editTask(int i, int j) async {
+    final task = await widget.editTask(i, j);
+    if (task == null) return null;
+    setState(() {
+      tasks[j].content = task.content;
+    });
+    return task;
   }
 }
