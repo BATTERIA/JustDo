@@ -109,12 +109,10 @@ class CardView extends StatelessWidget {
                             color: JColors.deleteIcon,
                           ),
                           itemBuilder: (BuildContext context) {
-//                            final height = 40 * (tasks.length + 1);
                             return [
                               PopupMenuItem(
                                 enabled: false,
                                 child: Container(
-//                                  height: height.toDouble(),
                                   width: 200,
                                   child: TaskList(
                                     index: index,
@@ -167,12 +165,12 @@ class TaskList extends StatefulWidget {
 }
 
 class _TaskListState extends State<TaskList> {
-  List<Task> tasks;
+  List<Task> tasks = <Task>[];
 
   @override
   void initState() {
     super.initState();
-    tasks = widget.tasks;
+    tasks.addAll(widget.tasks);
   }
 
   @override
@@ -181,14 +179,16 @@ class _TaskListState extends State<TaskList> {
     tasks.forEach((element) {
       lists.add(Container(
         child: ChildView(
+          key: ValueKey(element),
           todoIndex: widget.index,
           index: tasks.indexOf(element),
           content: element.content,
           dateTime: element.date,
           deleteItem: (int i, int j) {
-//            tasks.removeAt(j);
             widget.deleteTask(i, j);
-            setState(() {});
+            setState(() {
+              tasks.removeAt(j);
+            });
           },
           editTodo: editTask,
         ),
@@ -201,7 +201,7 @@ class _TaskListState extends State<TaskList> {
         dateTime: '',
         addTask: (int i) async {
           final task = await widget.addTask(i);
-//          tasks.add(task);
+          tasks.add(task);
           setState(() {});
         },
       ),
