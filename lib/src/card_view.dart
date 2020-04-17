@@ -201,6 +201,7 @@ class _TaskListState extends State<TaskList> {
         dateTime: '',
         addTask: (int i) async {
           final task = await widget.addTask(i);
+          if (task == null || task.content == null) return null;
           tasks.add(task);
           setState(() {});
         },
@@ -216,7 +217,7 @@ class _TaskListState extends State<TaskList> {
 
   Future<Task> editTask(int i, int j) async {
     final task = await widget.editTask(i, j);
-    if (task == null) return null;
+    if (task == null || task.content == null) return null;
     setState(() {
       tasks[j].content = task.content;
     });

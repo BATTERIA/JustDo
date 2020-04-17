@@ -7,8 +7,8 @@ class ChildView extends StatefulWidget {
     Key key,
     this.todoIndex,
     this.index,
-    this.content,
-    this.dateTime,
+    this.content = '',
+    this.dateTime = '',
     this.deleteItem,
     this.editTodo,
   }) : super(key: key);
