@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:just_do/src/jcolors.dart';
+import 'package:just_do/src/constant/jcolors.dart';
 
 import 'small_card_view.dart';
-import 'todo.dart';
+import '../entity/todo.dart';
 
 typedef EditCallback = Function(int index);
 
@@ -196,6 +196,7 @@ class _TaskListState extends State<TaskList> {
     });
     lists.add(Container(
       child: AddChildView(
+        key: ValueKey(Task('', '')),
         index: widget.index,
         content: '添加新的Task项',
         dateTime: '',

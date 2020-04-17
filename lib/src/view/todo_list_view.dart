@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:just_do/src/card_view.dart';
+import 'package:just_do/src/view/card_view.dart';
 
 import 'add_card.dart';
-import 'todo.dart';
+import '../entity/todo.dart';
 
 typedef DeleteFunction = Function(int index);
 
@@ -48,8 +48,6 @@ class _TodoListViewState extends State<TodoListView> {
     return ReorderableListView(
       padding: EdgeInsets.only(top: 25),
       onReorder: (int oldIndex, int newIndex) {
-        print(oldIndex);
-        print(newIndex);
         var element = widget.todos[oldIndex];
         if (newIndex >= widget.todos.length) newIndex = widget.todos.length - 1;
         setState(() {
@@ -63,6 +61,7 @@ class _TodoListViewState extends State<TodoListView> {
           return GestureDetector(
             key: ValueKey(todo),
             child: AddCard(
+              key: ValueKey(todo),
               content: '添加新的Todo项',
             ),
             onTap: widget.addTodo,

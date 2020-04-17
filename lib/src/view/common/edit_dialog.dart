@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:just_do/src/room_dialog.dart';
+import 'package:just_do/src/view/common/room_dialog.dart';
 
 typedef ConfirmedCallback = Function(String content);
 

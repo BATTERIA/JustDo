@@ -1,12 +1,11 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:just_do/src/edit_dialog.dart';
-import 'package:just_do/src/float_button.dart';
-import 'package:just_do/src/todo.dart';
-import 'package:just_do/src/todo_list_view.dart';
+import 'package:just_do/src/view/common/edit_dialog.dart';
+import 'package:just_do/src/entity/todo.dart';
+import 'package:just_do/src/view/todo_list_view.dart';
 
-import 'list_storage.dart';
+import '../storage/list_storage.dart';
 
 class TodoPage extends StatefulWidget {
   @override
@@ -34,24 +33,24 @@ class _TodoPageState extends State<TodoPage> {
     return Stack(
       children: [
         TodoListView(
+          key: Key('todo_list'),
+          todos: todos,
           editTodo: editTodo,
           addTodo: addTodo,
-          deleteFunction: (index) {
-            setState(() {
-              todos.removeAt(index);
-            });
-            _listStorage.save(todos);
-          },
-          todos: todos,
+          deleteFunction: deleteTodo,
           editTask: editTask,
           addTask: addTask,
           deleteTask: deleteTask,
         ),
-//        FloatButton(
-//          onTap: addTodo,
-//        ),
       ],
     );
+  }
+
+  void deleteTodo(int index) {
+    setState(() {
+      todos.removeAt(index);
+    });
+    _listStorage.save(todos);
   }
 
   void addTodo() {

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:just_do/src/jcolors.dart';
+import 'package:just_do/src/constant/jcolors.dart';
 
 class AddCard extends StatelessWidget {
   const AddCard({

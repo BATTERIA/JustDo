@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:hive/hive.dart';
-import 'package:just_do/src/todo.dart';
+import 'package:just_do/src/entity/todo.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ListStorage {

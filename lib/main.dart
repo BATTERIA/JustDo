@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:just_do/src/todo_page.dart';
+import 'package:just_do/src/view/todo_page.dart';
 
 void main() async {
   if (Platform.isMacOS) {
